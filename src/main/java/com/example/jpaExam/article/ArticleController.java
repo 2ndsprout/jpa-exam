@@ -11,5 +11,7 @@ public class ArticleController {
 
     public void test() {
         memoryDB.run();
+
     }
+
 }

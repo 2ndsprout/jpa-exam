@@ -8,7 +8,7 @@ import java.util.List;
 
 // JpaRepository 상속 받아 interface 생성
 // <대상엔터티, ID 타입>
-public interface ArticleRepository extends JpaRepository<Article, Integer> {
+public interface ArticleRepository extends JpaRepository<Article, Integer>, ArticleRepositoryCustom {
 
     // find => 하고자 액션
     // delete, findAll
@@ -29,6 +29,15 @@ public interface ArticleRepository extends JpaRepository<Article, Integer> {
           from Article a
     """)
     List<MyResultDto> findTitleAndContent();
+
+    @Query("""
+            SELECT new com.example.jpaExam.article.CountPerYmDto(
+            CONCAT(YEAR(a.createDate), '-',MONTH(a.createDate)), COUNT(a.id))
+                FROM Article a
+                GROUP BY CONCAT(YEAR(a.createDate), '-',MONTH(a.createDate))
+                ORDER BY CONCAT(YEAR(a.createDate), '-',MONTH(a.createDate)) DESC
+            """)
+    List<CountPerYmDto> findCountPerYm ();
 
 
 }
